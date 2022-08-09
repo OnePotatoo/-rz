@@ -115,3 +115,43 @@ export function param2Obj(url) {
   })
   return obj
 }
+
+export function transListToTree (list, rootValue) {
+  const arr = []
+  list.forEach(item => {
+    if (item.pid === rootValue) {
+      const children = transListToTree(list, item.id)
+      if (children.length) {
+        item.children = children
+      }
+      arr.push(item)
+    }
+  })
+  return arr
+}
+
+export function transListToTreeNew (list) {
+  const treeList = []
+  const map = {}
+  // console.log(list, 136)
+
+  list.forEach(item => {
+    if (!item.children) {
+      item.children = []
+    }
+    map[item.id] = item
+  })
+
+  list.forEach(item => {
+    const parent = map[item.pid]
+    // console.log(parent, 147)
+    if (parent) {
+      parent.children.push(item)
+    } else {
+      treeList.push(item)
+    }
+  })
+  treeList.splice(0, 1)
+  // console.log(treeList)
+  return treeList
+}
